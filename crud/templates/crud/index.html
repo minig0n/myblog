@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Página inicial
+{% endblock title %}
+
+{% block content %}
+<h2>Todas as publicações</h2>
+
+<section>
+    {% if perms.crud.add_movie %}
+    <p>Não encontrou o que queria? <a href="{% url 'crud:create' %}">Adicionar</a> 
+    {% endif%}
+</section>
+
+{% if post_list %}
+<section class="lista-de-cards">
+    {% for post in post_list %}
+        {% if post.active %}
+            <article class="card">
+                <a href="{% url 'crud:detail' post.id %}", style="margin: auto; width: 300px;"><img src="{{ post.thumbnail_url }}"
+                        alt="Thumbnail de {{ post.name}}"></a>
+                <div style="width: 800px;">
+                    <p style="padding-left: 20px; font-size: large;"><strong>{{ post.name }}</strong></p>
+                    <p style="padding-left: 20px;">({{ post.date_posted }})</p>
+                </div>
+            </article>
+        {% endif %}
+    {% endfor %}
+</section>
+{% else %}
+<p>Não foi encontrada nenhuma publicação.</p>
+{% endif %}
+
+{% if last_posts %}
+<hr>
+<h2>Últimos vistos</h2>
+<section class="lista-de-cards">
+    {% for last_post in last_posts %}
+    <article class="small-card">
+        <a href="{% url 'crud:detail' last_post.id %}"><img src="{{ last_post.thumbnail_url }}"
+                alt="Thumbnail de {{ last_post.name}}"></a>
+    </article>
+    {% endfor %}
+</section>
+{% endif %}
+
+{% endblock content %}

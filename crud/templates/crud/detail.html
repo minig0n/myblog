@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ post.name }} ({{ post.date_posted }})
+{% endblock title %}
+
+{% block content %}
+<h2>{{ post.name }}</h2>
+<h3>{{ post.date_posted }}</h3>
+
+<section class="dados-de-filme">
+    <img src="{{ post.thumbnail_url }}" alt="Thumbnail de {{ post.name}}">
+    <ul>
+        <li><a href="{% url 'crud:update' post.id %}">Editar</a></li>
+        <li><a href="{% url 'crud:delete' post.id %}">Apagar</a></li>
+    </ul>
+</section>
+
+<section>
+    {{ post.content|safe }}
+</section>
+
+<hr>
+
+<p><a href="{% url 'crud:index'%}">Voltar ao início</a></p>
+
+{% endblock content %}
