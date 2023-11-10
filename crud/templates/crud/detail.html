@@ -5,23 +5,24 @@
 {% endblock title %}
 
 {% block content %}
-<h2>{{ post.name }}</h2>
-<h3>{{ post.date_posted }}</h3>
+<section style="margin: 0px 100px;">
+    <h2>{{ post.name }}</h2>
+    <h3>{{ post.date_posted }}</h3>
+</section>
 
 <section class="dados-de-filme">
     <img src="{{ post.thumbnail_url }}" alt="Thumbnail de {{ post.name}}">
-    <ul>
-        <li><a href="{% url 'crud:update' post.id %}">Editar</a></li>
-        <li><a href="{% url 'crud:delete' post.id %}">Apagar</a></li>
-    </ul>
 </section>
 
-<section>
+<section style="margin: 0px 100px;">
     {{ post.content|safe }}
+    <p><a href="{% url 'crud:update' post.id %}">Editar</a></p>
+    <p><a href="{% url 'crud:delete' post.id %}">Apagar</a></p>
+
+    <hr>
+    <p><a href="{% url 'crud:index'%}">Voltar ao início</a></p>
 </section>
 
-<hr>
 
-<p><a href="{% url 'crud:index'%}">Voltar ao início</a></p>
 
 {% endblock content %}

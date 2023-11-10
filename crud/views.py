@@ -83,6 +83,7 @@ def update_post(request, post_id):
             post.name = form.cleaned_data['name']
             post.date_posted = form.cleaned_data['date_posted']
             post.thumbnail_url = form.cleaned_data['thumbnail_url']
+            post.content = form.cleaned_data['content']
             post.save()
             return HttpResponseRedirect(
                 reverse('crud:detail', args=(post.id, )))
@@ -91,7 +92,8 @@ def update_post(request, post_id):
             initial={
                 'name': post.name,
                 'date_posted': post.date_posted,
-                'thumbnail_url': post.thumbnail_url
+                'thumbnail_url': post.thumbnail_url,
+                'content': post.content,
             })
 
     context = {'post': post, 'form': form}

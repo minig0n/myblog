@@ -7,6 +7,7 @@ class Post(models.Model):
     date_posted = models.CharField(max_length=255)
     thumbnail_url = models.URLField(max_length=200, null=True)
     active = models.BooleanField()
+    content = models.TextField()
 
     def __str__(self):
         return f'{self.name} ({self.date_posted})'

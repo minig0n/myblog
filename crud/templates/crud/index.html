@@ -18,8 +18,9 @@ Página inicial
     {% for post in post_list %}
         {% if post.active %}
             <article class="card">
-                <a href="{% url 'crud:detail' post.id %}", style="margin: auto; width: 300px;"><img src="{{ post.thumbnail_url }}"
-                        alt="Thumbnail de {{ post.name}}"></a>
+                <a href="{% url 'crud:detail' post.id %}", style="margin: auto; width: 300px;">
+                    <img src="{{ post.thumbnail_url }}" alt="Thumbnail de {{ post.name}}">
+                </a>
                 <div style="width: 800px;">
                     <p style="padding-left: 20px; font-size: large;"><strong>{{ post.name }}</strong></p>
                     <p style="padding-left: 20px;">({{ post.date_posted }})</p>

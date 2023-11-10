@@ -9,9 +9,11 @@ class PostForm(ModelForm):
             'name',
             'date_posted',
             'thumbnail_url',
+            'content',
         ]
         labels = {
             'name': 'Título',
             'date_posted': 'Data da Publicação',
             'thumbnail_url': 'URL da thumbnail',
+            'content': 'Conteúdo em HTML',
         }
