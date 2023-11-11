@@ -136,3 +136,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = 'crud:index'
 LOGOUT_REDIRECT_URL = 'crud:index'
 LOGIN_URL = 'login'
+
+USE_TZ = True
+TIME_ZONE = "America/Sao_Paulo"

@@ -5,6 +5,9 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponseRedirect
 
+import datetime
+import pytz
+
 from .forms import PostForm
 
 
@@ -63,13 +66,18 @@ def create_post(request):
         if post_form.is_valid():
             post = Post(**post_form.cleaned_data)
             post.active = True
+
+            current_datetime = datetime.datetime.now()
+
+            post.date_posted = current_datetime
+
             post.save()
             
             return HttpResponseRedirect(
                 reverse('crud:detail', args=(post.pk, )))
         
     else:
-        post_form = PostForm()
+        post_form = PostForm(initial= {'content': '<p></p>'})
 
     context = {'post_form': post_form}
     return render(request, 'crud/create.html', context)
@@ -81,7 +89,6 @@ def update_post(request, post_id):
         form = PostForm(request.POST)
         if form.is_valid():
             post.name = form.cleaned_data['name']
-            post.date_posted = form.cleaned_data['date_posted']
             post.thumbnail_url = form.cleaned_data['thumbnail_url']
             post.content = form.cleaned_data['content']
             post.save()
