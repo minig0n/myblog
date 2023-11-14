@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Adicionar comentário para {{ post.name }} ({{ post.date_posted }})</h2>
+
+<form action="{% url 'crud:review' post.id %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Postar comentário</button>
+</form>
+
+<p><a href="{% url 'crud:detail' post.id %}">Voltar para a publicação</a></p>
+{% endblock content %}

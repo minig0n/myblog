@@ -7,10 +7,12 @@ Nova Publicação
 {% block content %}
 <h2>Adicionar Publicação</h2>
 
-<form action="{% url 'crud:create' %}" method="post">
-    {% csrf_token %}
-    {{ post_form.as_p }}
-    <button type="submit">Criar</button>
-</form>
+{% if perms.crud.add_post %}
+    <form action="{% url 'crud:create' %}" method="post">
+        {% csrf_token %}
+        {{ post_form.as_p }}
+        <button type="submit">Criar</button>
+    </form>
+{% endif %}
 
 {% endblock content %}

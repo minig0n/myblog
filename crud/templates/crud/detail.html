@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
 
 {% block title %}
-{{ post.name }} ({{ post.date_posted }})
+    {{ post.name }} ({{ post.date_posted }})
 {% endblock title %}
 
 {% block content %}
-<section style="margin: 0px 100px;">
+
+{% if post.active %}
+
+<section>
     <h2>{{ post.name }}</h2>
     <h3>{{ post.date_posted }}</h3>
 </section>
@@ -14,15 +17,49 @@
     <img src="{{ post.thumbnail_url }}" alt="Thumbnail de {{ post.name}}">
 </section>
 
-<section style="margin: 0px 100px;">
+<section>
     {{ post.content|safe }}
-    <p><a href="{% url 'crud:update' post.id %}">Editar</a></p>
-    <p><a href="{% url 'crud:delete' post.id %}">Apagar</a></p>
+
+    {% if perms.crud.add_post %}
+        <a href="{% url 'crud:update' post.id %}"><button>Editar</button></a>
+        <a href="{% url 'crud:delete' post.id %}"><button>Apagar</button></a>
+    {% endif %}
 
     <hr>
-    <p><a href="{% url 'crud:index'%}">Voltar ao início</a></p>
 </section>
 
+<section>
+    <header>
+        <h3>Comentários</h3>
+    </header>
 
+    {% if post.review_set.all %}
+    {% for review in post.review_set.all %}
+
+    <article class="review-card">
+        <h4>{{ review.author }} {{ review.date_posted }}</h4>
+        <p>{{ review.text }}</p>
+    </article>
+
+    {% endfor %}
+    {% else %}
+    <p>Essa publicação ainda não tem comentários.</p>
+    {% endif %}
+
+    <hr>
+
+    <a href="{% url 'crud:index'%}"><button>Voltar</button></a>
+    <a href="{% url 'crud:review' post.pk %}"><button>Adicionar comentário</button></a>
+</section>
+
+{% else %}
+
+<section>
+    <h2>Essa publicação não existe mais.</h2>
+</section>
+
+{% endif %}
 
 {% endblock content %}
+
+

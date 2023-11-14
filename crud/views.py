@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
-from .models import Post
+from .models import Post, Review
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponseRedirect
@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 import datetime
 import pytz
 
-from .forms import PostForm
+from .forms import PostForm, ReviewForm
 
 
 # Create your views here.
@@ -33,7 +33,6 @@ class PostListView(generic.ListView):
                     context['last_posts'].append(new_object)
         return context
     
-
 def detail_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     if 'last_viewed' not in request.session:
@@ -45,7 +44,8 @@ def detail_post(request, post_id):
     context = {'post': post}
     return render(request, 'crud/detail.html', context)
 
-
+@login_required
+@permission_required('posts.add_post')
 def delete_post(request, post_id=None):
     post = get_object_or_404(Post, pk=post_id)
 
@@ -82,6 +82,8 @@ def create_post(request):
     context = {'post_form': post_form}
     return render(request, 'crud/create.html', context)
 
+@login_required
+@permission_required('posts.add_post')
 def update_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
 
@@ -105,3 +107,27 @@ def update_post(request, post_id):
 
     context = {'post': post, 'form': form}
     return render(request, 'crud/update.html', context)
+
+@login_required
+def create_review(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+
+        if form.is_valid():
+            review_author = request.user
+            review_text = form.cleaned_data['text']
+            review = Review(author=review_author,
+                            text=review_text,
+                            post=post)
+            
+            current_datetime = datetime.datetime.now()
+            review.date_posted = current_datetime
+            
+            review.save()
+            return HttpResponseRedirect(
+                reverse('crud:detail', args=(post_id, )))
+    else:
+        form = ReviewForm()
+    context = {'form': form, 'post': post}
+    return render(request, 'crud/review.html', context)

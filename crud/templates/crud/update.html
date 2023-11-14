@@ -1,11 +1,20 @@
 {% extends 'base.html' %}
 
+{% block title %}
+Editar publicação
+{% endblock title %}
+
 {% block content %}
-<h2>Atualizar a publicação: {{ post.name }}</h2>
-<form method="POST" action="{% url 'crud:update' post.id%}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Atualizar</button>
-</form>
+
+{% if perms.crud.add_post %}
+    <h2>Atualizar a publicação: {{ post.name }}</h2>
+    <form method="POST" action="{% url 'crud:update' post.id%}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Atualizar</button>
+    </form>
+{% else %}
+    <h2>Você não tem permissão para acessar essa página.</h2>
+{% endif %}
 
 {% endblock content %}
