@@ -13,7 +13,7 @@ def signup(request):
             user_group = Group.objects.get(name='basic_user')
             user.groups.add(user_group)
 
-            return HttpResponseRedirect(reverse('index'))
+            return HttpResponseRedirect(reverse('crud:index'))
     else:
         form = UserCreationForm()
 

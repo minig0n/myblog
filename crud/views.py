@@ -77,7 +77,7 @@ def create_post(request):
                 reverse('crud:detail', args=(post.pk, )))
         
     else:
-        post_form = PostForm(initial= {'content': '<p></p>'})
+        post_form = PostForm(initial= {'content': '<p></p>\n<img src="" alt="img_1" style="max-width:400px;">'})
 
     context = {'post_form': post_form}
     return render(request, 'crud/create.html', context)
@@ -131,3 +131,11 @@ def create_review(request, post_id):
         form = ReviewForm()
     context = {'form': form, 'post': post}
     return render(request, 'crud/review.html', context)
+
+def search_posts(request):
+    context = {}
+    if request.GET.get('query', False):
+        search_term = request.GET['query'].lower()
+        post_list = Post.objects.filter(name__icontains=search_term, active=True)
+        context = {"post_list": post_list}
+    return render(request, 'crud/index.html', context)

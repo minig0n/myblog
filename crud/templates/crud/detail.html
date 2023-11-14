@@ -19,10 +19,14 @@
 
 <section>
     {{ post.content|safe }}
+</section>
 
+<section>
+
+    <a href="{% url 'crud:index'%}"><button>Voltar</button></a>
     {% if perms.crud.add_post %}
         <a href="{% url 'crud:update' post.id %}"><button>Editar</button></a>
-        <a href="{% url 'crud:delete' post.id %}"><button>Apagar</button></a>
+        <a href="{% url 'crud:delete' post.id %}"><button class="delete-button">Apagar</button></a>
     {% endif %}
 
     <hr>
@@ -33,12 +37,15 @@
         <h3>Comentários</h3>
     </header>
 
+    <a href="{% url 'crud:review' post.pk %}"><button>Adicionar comentário</button></a>
+
     {% if post.review_set.all %}
     {% for review in post.review_set.all %}
 
     <article class="review-card">
-        <h4>{{ review.author }} {{ review.date_posted }}</h4>
+        <h4>Usuário: {{ review.author }}</h4>
         <p>{{ review.text }}</p>
+        <h5>{{ review.date_posted }}</h5>
     </article>
 
     {% endfor %}
@@ -46,10 +53,6 @@
     <p>Essa publicação ainda não tem comentários.</p>
     {% endif %}
 
-    <hr>
-
-    <a href="{% url 'crud:index'%}"><button>Voltar</button></a>
-    <a href="{% url 'crud:review' post.pk %}"><button>Adicionar comentário</button></a>
 </section>
 
 {% else %}
