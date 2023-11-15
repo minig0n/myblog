@@ -1,5 +1,5 @@
 from django.forms import ModelForm, ModelMultipleChoiceField, CheckboxSelectMultiple
-from .models import Post, Review
+from .models import Post, Review, Category
 
 
 class PostForm(ModelForm):
@@ -25,3 +25,13 @@ class ReviewForm(ModelForm):
         labels = {
             'text': 'Comentário',
         }
+
+# class CategoryForm(CheckboxSelectMultiple):
+#     class Meta:
+#         model = Category
+#         fields = [
+#             '',
+#         ]
+#         labels = {
+#             ''
+#         }

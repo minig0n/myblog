@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Categorias
+{% endblock title %}
+
+{% block content %}
+
+<h2>Todas as categorias</h2>
+
+{% if category_list %}
+
+<section class="lista-de-categorias">
+    {% for category in category_list %}
+
+        <article class="card-de-categoria">
+            <a href="{% url 'crud:category-list' category.id %}"><h3>{{ category.name }}</h3></a>
+            <p>{{ category.description }}</p>
+        </article>
+
+    {% endfor %}
+</section>
+
+{% else %}
+<p>Não foi encontrada nenhuma categoria.</p>
+{% endif %}
+
+{% endblock content %}

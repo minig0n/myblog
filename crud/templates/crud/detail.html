@@ -8,6 +8,17 @@
 
 {% if post.active %}
 
+{% if post.category_set.all %}
+
+<section style="display: flex; margin-left: -10px;">
+    {% for category in post.category_set.all %}
+    <a href="{% url 'crud:category-list' category.id %}"><p style="margin-right: 10px; margin-bottom: 0px; margin-left: 10px;">{{ category.name }}</p></a>
+    <p>|</p>
+    {% endfor %}
+</section>
+
+{% endif %}
+
 <section>
     <h2>{{ post.name }}</h2>
     <h3>{{ post.date_posted }}</h3>

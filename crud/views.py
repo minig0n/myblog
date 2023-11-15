@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
-from .models import Post, Review
+from .models import Post, Review, Category
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponseRedirect
@@ -31,6 +31,28 @@ class PostListView(generic.ListView):
                 new_object = get_object_or_404(Post, pk=post_id)
                 if new_object.active and new_object not in context['last_posts']:
                     context['last_posts'].append(new_object)
+        return context
+    
+class CategoryPostListView(generic.ListView):
+    model = Post
+    ordering = ['-date_posted']
+
+    template_name = 'crud/category-list.html'
+    
+class CategoryListView(generic.ListView):
+    model = Category
+    ordering = ['name']
+
+    template_name = 'crud/category.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if 'last_viewed' in self.request.session:
+            context['last_categorys'] = []
+            for post_id in self.request.session['last_viewed']:
+                new_object = get_object_or_404(Post, pk=post_id)
+                if new_object.active and new_object not in context['last_categorys']:
+                    context['last_categorys'].append(new_object)
         return context
     
 def detail_post(request, post_id):
@@ -137,5 +159,6 @@ def search_posts(request):
     if request.GET.get('query', False):
         search_term = request.GET['query'].lower()
         post_list = Post.objects.filter(name__icontains=search_term, active=True)
+        category_list = Category
         context = {"post_list": post_list}
     return render(request, 'crud/index.html', context)
