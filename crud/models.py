@@ -34,3 +34,10 @@ class Category(models.Model):
 
     def __str__(self):
         return f'{self.name}'
+    
+# class Category_Posts(models.Model):
+#     post_id = models.ForeignKey(Post, on_delete=models.CASCADE)
+#     category_id = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+#     def __str__(self):
+#         return f'{self.post_id} in {self.category_id}'

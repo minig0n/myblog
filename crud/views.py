@@ -32,12 +32,11 @@ class PostListView(generic.ListView):
                 if new_object.active and new_object not in context['last_posts']:
                     context['last_posts'].append(new_object)
         return context
-    
-class CategoryPostListView(generic.ListView):
-    model = Post
-    ordering = ['-date_posted']
 
-    template_name = 'crud/category-list.html'
+def detail_category(request, category_id):
+    category_detail = get_object_or_404(Category, pk=category_id)
+    context = {'category': category_detail}
+    return render(request, 'crud/category-list.html', context)
     
 class CategoryListView(generic.ListView):
     model = Category
@@ -82,11 +81,19 @@ def delete_post(request, post_id=None):
 @login_required
 @permission_required('posts.add_post')
 def create_post(request):
+
     if request.method == 'POST':
         post_form = PostForm(request.POST)
-        
+
         if post_form.is_valid():
-            post = Post(**post_form.cleaned_data)
+            post = Post()
+            post.name = post_form.cleaned_data['name']
+            post.thumbnail_url = post_form.cleaned_data['thumbnail_url']
+            post.content = post_form.cleaned_data['content']
+
+            category_list = post_form.cleaned_data['category_post']
+            print(category_list)
+            
             post.active = True
 
             current_datetime = datetime.datetime.now()
@@ -94,6 +101,10 @@ def create_post(request):
             post.date_posted = current_datetime
 
             post.save()
+
+            for cat in category_list:
+                category = get_object_or_404(Category, pk=int(cat))
+                category.posts.add(post)
             
             return HttpResponseRedirect(
                 reverse('crud:detail', args=(post.pk, )))
@@ -111,11 +122,14 @@ def update_post(request, post_id):
 
     if request.method == "POST":
         form = PostForm(request.POST)
+
         if form.is_valid():
             post.name = form.cleaned_data['name']
             post.thumbnail_url = form.cleaned_data['thumbnail_url']
             post.content = form.cleaned_data['content']
+
             post.save()
+
             return HttpResponseRedirect(
                 reverse('crud:detail', args=(post.id, )))
     else:

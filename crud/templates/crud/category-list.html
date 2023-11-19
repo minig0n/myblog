@@ -6,10 +6,13 @@ Página inicial
 
 {% block content %}
 
-{% if post_list %}
+<h2>{{ category.name }}</h2>
+<p>{{ category.description }}</p>
+
+{% if category.posts.all %}
 
 <section class="lista-de-cards">
-    {% for post in post_list %}
+    {% for post in category.posts.all %}
         {% if post.active == 1 %}
 
             <article class="card">
@@ -32,7 +35,7 @@ Página inicial
 </section>
 
 {% else %}
-<p>Não foi encontrada nenhuma publicação.</p>
+<p>Não foi encontrada nenhuma publicação dessa categoria.</p>
 {% endif %}
 
 {% endblock content %}

@@ -16,13 +16,13 @@ Página inicial
     <button type="submit" style="margin: 30px; height: 50px;">Buscar</button>
 </form>
 
-<h2>Todas as publicações</h2>
-
 <section>
     {% if perms.crud.add_post %}
     <a href="{% url 'crud:create' %}"><button>Nova publicação</button></a>
     {% endif%}
 </section>
+
+<h2>Todas as publicações</h2>
 
 {% if post_list %}
 

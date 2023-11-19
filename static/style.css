@@ -174,7 +174,7 @@
     font-size: medium;
     font-weight: bold;
     margin: 0.5rem 0;
-    padding: 1rem 2rem;
+    padding: 0.8rem 1.8rem;
   }
 
   .delete-button {
@@ -194,3 +194,22 @@
     margin: 1rem 0rem;
     padding: 0rem 1rem;
   }
+
+.form-test input[type='checkbox'] {
+  width: 100%;
+  max-width: 15px;
+  border: 1px solid var(--secondary-bg-color);
+  border-radius: 5px;
+  margin: 0;
+}
+
+.form-test div[id='id_category_post']{
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-test textarea{
+  display: flex;
+  width: 918px;
+  height: 400px;
+}

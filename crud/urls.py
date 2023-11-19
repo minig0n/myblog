@@ -14,5 +14,6 @@ urlpatterns = [
     path('review/<int:post_id>/', views.create_review, name='review'),
     path('search/', views.search_posts, name='search'),
     path('category/', views.CategoryListView.as_view(), name='category'),
-    path('category/<int:category_id>', views.CategoryPostListView.as_view(), name='category-list'),
+    path('category/<int:category_id>', views.detail_category, name='category-list'),
+    # path('category/<int:category_id>', views.CategoryPostListView.as_view(), name='category-list'),
 ]

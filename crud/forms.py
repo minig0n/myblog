@@ -1,8 +1,21 @@
-from django.forms import ModelForm, ModelMultipleChoiceField, CheckboxSelectMultiple
+from django.forms import ModelForm, MultipleChoiceField, CheckboxSelectMultiple
 from .models import Post, Review, Category
 
 
 class PostForm(ModelForm):
+    cat = []
+    category_list = Category.objects.all()
+    for category in category_list:
+        cat.append((category.pk, category.name))
+
+    category_list = cat
+    print(category_list)
+
+    category_post = MultipleChoiceField(label='Categorias', 
+                                        choices=category_list, 
+                                        widget=CheckboxSelectMultiple()
+                                        )
+
     class Meta:
         model = Post
         fields = [
@@ -15,6 +28,7 @@ class PostForm(ModelForm):
             'thumbnail_url': 'URL da thumbnail',
             'content': 'Conteúdo em HTML',
         }
+        
 
 class ReviewForm(ModelForm):
     class Meta:
@@ -25,13 +39,3 @@ class ReviewForm(ModelForm):
         labels = {
             'text': 'Comentário',
         }
-
-# class CategoryForm(CheckboxSelectMultiple):
-#     class Meta:
-#         model = Category
-#         fields = [
-#             '',
-#         ]
-#         labels = {
-#             ''
-#         }

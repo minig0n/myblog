@@ -21,13 +21,13 @@
             <ul>
                 <li><a href="{% url 'crud:index' %}">Home</a></li>
                 <li><a href="{% url 'crud:category' %}">Categorias</a></li>
+                <li><a href="{% url 'crud:about' %}">Sobre</a></li>
                 {% if user.is_authenticated %}
                 <li> Logado com {{ user.username }} </li>
                 <li><a href="{% url 'logout' %}">Log out</a></li>
                 {% else %}
                 <li><a href="{% url 'login' %}">Log in</a></li>
                 {% endif %}
-                <li><a href="{% url 'crud:about' %}">Sobre</a></li>
             </ul>
         </nav>
     </header>
