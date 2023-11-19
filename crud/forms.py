@@ -9,12 +9,11 @@ class PostForm(ModelForm):
         cat.append((category.pk, category.name))
 
     category_list = cat
-    print(category_list)
 
     category_post = MultipleChoiceField(label='Categorias', 
                                         choices=category_list, 
-                                        widget=CheckboxSelectMultiple()
-                                        )
+                                        widget=CheckboxSelectMultiple(),
+                                        required=False)
 
     class Meta:
         model = Post

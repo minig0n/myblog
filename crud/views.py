@@ -92,7 +92,6 @@ def create_post(request):
             post.content = post_form.cleaned_data['content']
 
             category_list = post_form.cleaned_data['category_post']
-            print(category_list)
             
             post.active = True
 
@@ -133,12 +132,21 @@ def update_post(request, post_id):
             return HttpResponseRedirect(
                 reverse('crud:detail', args=(post.id, )))
     else:
+
+        cat = []
+        category_list = Category.objects.all()
+        for category in category_list:
+            cat.append((category.pk, category.name))
+
+        category_list = cat
+
         form = PostForm(
             initial={
                 'name': post.name,
                 'date_posted': post.date_posted,
                 'thumbnail_url': post.thumbnail_url,
                 'content': post.content,
+                'category_post': category_list,
             })
 
     context = {'post': post, 'form': form}

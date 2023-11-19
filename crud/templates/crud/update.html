@@ -8,7 +8,7 @@ Editar publicação
 
 {% if perms.crud.add_post %}
     <h2>Atualizar a publicação: {{ post.name }}</h2>
-    <form method="POST" action="{% url 'crud:update' post.id%}">
+    <form class="form-test" method="POST" action="{% url 'crud:update' post.id%}">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Atualizar</button>
