@@ -32,27 +32,6 @@ class PostListView(generic.ListView):
                 if new_object.active and new_object not in context['last_posts']:
                     context['last_posts'].append(new_object)
         return context
-
-def detail_category(request, category_id):
-    category_detail = get_object_or_404(Category, pk=category_id)
-    context = {'category': category_detail}
-    return render(request, 'crud/category-list.html', context)
-    
-class CategoryListView(generic.ListView):
-    model = Category
-    ordering = ['name']
-
-    template_name = 'crud/category.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if 'last_viewed' in self.request.session:
-            context['last_categorys'] = []
-            for post_id in self.request.session['last_viewed']:
-                new_object = get_object_or_404(Post, pk=post_id)
-                if new_object.active and new_object not in context['last_categorys']:
-                    context['last_categorys'].append(new_object)
-        return context
     
 def detail_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
@@ -87,17 +66,13 @@ def create_post(request):
 
         if post_form.is_valid():
             post = Post()
+            post.active = True
             post.name = post_form.cleaned_data['name']
             post.thumbnail_url = post_form.cleaned_data['thumbnail_url']
             post.content = post_form.cleaned_data['content']
+            post.date_posted = datetime.datetime.now()
 
             category_list = post_form.cleaned_data['category_post']
-            
-            post.active = True
-
-            current_datetime = datetime.datetime.now()
-
-            post.date_posted = current_datetime
 
             post.save()
 
@@ -109,10 +84,12 @@ def create_post(request):
                 reverse('crud:detail', args=(post.pk, )))
         
     else:
-        post_form = PostForm(initial= {'content': '<p></p>\n<img src="" alt="img_1" style="max-width:400px;">'})
+        post_form = PostForm(initial= {
+            'content': '<p></p>\n<img src="" alt="img_1" style="max-width:400px;">'})
 
     context = {'post_form': post_form}
     return render(request, 'crud/create.html', context)
+
 
 @login_required
 @permission_required('posts.add_post')
@@ -133,12 +110,13 @@ def update_post(request, post_id):
                 reverse('crud:detail', args=(post.id, )))
     else:
 
+        ### Categoria
         cat = []
         category_list = Category.objects.all()
         for category in category_list:
             cat.append((category.pk, category.name))
-
         category_list = cat
+        ###
 
         form = PostForm(
             initial={
@@ -146,11 +124,34 @@ def update_post(request, post_id):
                 'date_posted': post.date_posted,
                 'thumbnail_url': post.thumbnail_url,
                 'content': post.content,
-                'category_post': category_list,
+                'category_post': category_list,  ### Categoria do post
             })
 
     context = {'post': post, 'form': form}
     return render(request, 'crud/update.html', context)
+
+
+
+def detail_category(request, category_id):
+    category_detail = get_object_or_404(Category, pk=category_id)
+    context = {'category': category_detail}
+    return render(request, 'crud/category-list.html', context)
+    
+class CategoryListView(generic.ListView):
+    model = Category
+    ordering = ['name']
+
+    template_name = 'crud/category.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if 'last_viewed' in self.request.session:
+            context['last_categorys'] = []
+            for post_id in self.request.session['last_viewed']:
+                new_object = get_object_or_404(Post, pk=post_id)
+                if new_object.active and new_object not in context['last_categorys']:
+                    context['last_categorys'].append(new_object)
+        return context
 
 @login_required
 def create_review(request, post_id):
